@@ -28,15 +28,51 @@
         font-family: "Red Hat Display", system-ui, sans-serif;
         color: #010101;
         -webkit-font-smoothing: antialiased;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
       }
 
-      main {
+      button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+
+      .page {
+        position: relative;
+        width: 100%;
         max-width: 580px;
         margin: 0 auto;
-        padding: 72px 16px 48px;
+        padding: 16px 16px 0;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* Top corner buttons */
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .icon-btn {
+        width: 40px;
+        height: 40px;
+        display: grid;
+        place-items: center;
+        border-radius: 12px;
+        background: rgba(0, 0, 0, .3);
+        border: 1px solid rgba(255, 255, 255, .15);
+        color: #fff;
+        backdrop-filter: blur(8px);
+        transition: background .15s ease;
+      }
+
+      .icon-btn:hover { background: rgba(0, 0, 0, .45); }
+      .icon-btn svg { width: 20px; height: 20px; }
+
+      main {
         display: flex;
         flex-direction: column;
         align-items: center;
+        padding-top: 32px;
       }
 
       .avatar {
@@ -63,12 +99,18 @@
         gap: 16px;
       }
 
+      /* Link buttons */
+      .link {
+        position: relative;
+        transition: transform .12s ease;
+      }
+
       .button {
         display: flex;
         align-items: center;
         justify-content: center;
         min-height: 64px;
-        padding: 12px 32px;
+        padding: 12px 48px;
         background: #fff;
         color: #010101;
         border: 1.75px solid #000;
@@ -78,39 +120,300 @@
         font-weight: 500;
         text-align: center;
         text-decoration: none;
-        transition: transform .12s ease, box-shadow .12s ease;
+        transition: box-shadow .12s ease;
       }
 
-      .button:hover {
-        transform: translate(-1px, -1px);
-        box-shadow: 4px 5px 0 0 #000;
+      .link:hover { transform: translate(-1px, -1px); }
+      .link:hover .button { box-shadow: 4px 5px 0 0 #000; }
+      .link:active { transform: translate(3px, 4px); }
+      .link:active .button { box-shadow: 0 0 0 0 #000; }
+
+      .more {
+        position: absolute;
+        top: 50%;
+        right: 12px;
+        transform: translateY(-50%);
+        width: 32px;
+        height: 32px;
+        display: grid;
+        place-items: center;
+        border-radius: 9999px;
+        color: #6b6b6b;
       }
 
-      .button:active {
-        transform: translate(3px, 4px);
-        box-shadow: 0 0 0 0 #000;
-      }
+      .more:hover { background: rgba(0, 0, 0, .06); color: #010101; }
+      .more svg { width: 16px; height: 16px; }
 
-      .button:focus-visible {
+      .button:focus-visible, .icon-btn:focus-visible, .more:focus-visible, .sheet button:focus-visible, .sheet a:focus-visible {
         outline: 3px solid #fff;
         outline-offset: 3px;
       }
+      .more:focus-visible, .sheet button:focus-visible, .sheet a:focus-visible { outline-color: #5147E5; outline-offset: 1px; }
+
+      footer {
+        padding: 48px 16px 32px;
+        text-align: center;
+        color: rgba(255, 255, 255, .85);
+        font-size: 12px;
+        line-height: 1.6;
+      }
+
+      /* Share sheet */
+      .backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, .5);
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity .2s ease;
+        z-index: 10;
+      }
+
+      .backdrop.open { opacity: 1; pointer-events: auto; }
+
+      .sheet {
+        width: 100%;
+        max-width: 480px;
+        background: #fff;
+        border-radius: 24px 24px 0 0;
+        padding: 20px 20px 28px;
+        transform: translateY(100%);
+        transition: transform .25s ease;
+      }
+
+      .backdrop.open .sheet { transform: none; }
+
+      @media (min-width: 600px) {
+        .backdrop { align-items: center; }
+        .sheet { border-radius: 24px; }
+      }
+
+      .sheet-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 16px;
+      }
+
+      .sheet-head h2 { font-size: 16px; font-weight: 600; }
+
+      .close {
+        width: 32px;
+        height: 32px;
+        display: grid;
+        place-items: center;
+        border-radius: 9999px;
+      }
+
+      .close:hover { background: #f1f1f1; }
+      .close svg { width: 18px; height: 18px; }
+
+      .preview {
+        background: #5147E5;
+        color: #fff;
+        border-radius: 16px;
+        padding: 20px 16px;
+        text-align: center;
+        margin-bottom: 16px;
+      }
+
+      .preview strong { display: block; font-size: 16px; font-weight: 600; }
+      .preview span { display: block; margin-top: 4px; font-size: 12px; opacity: .85; word-break: break-all; }
+
+      .options { display: flex; flex-direction: column; gap: 4px; }
+
+      .option {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        padding: 12px;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #010101;
+        text-decoration: none;
+        text-align: left;
+      }
+
+      .option:hover { background: #f3f3f1; }
+
+      .option .ico {
+        width: 36px;
+        height: 36px;
+        border-radius: 9999px;
+        display: grid;
+        place-items: center;
+        background: #f3f3f1;
+        flex: none;
+      }
+
+      .option .ico svg { width: 18px; height: 18px; }
+
+      [hidden] { display: none !important; }
 
       @media (prefers-reduced-motion: reduce) {
-        .button { transition: none; }
+        .link, .button, .backdrop, .sheet { transition: none; }
       }
     </style>
   </head>
 
   <body>
-    <main>
-      <img class="avatar" src="images/avatar-seven.png" alt="Logo Seven Biz Solutions" width="96" height="96">
-      <h1>Seven Biz Solutions</h1>
+    <div class="page">
+      <div class="topbar">
+        <button class="icon-btn" type="button" data-share-page aria-label="Compartilhar página">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
+        </button>
+        <button class="icon-btn" type="button" data-share-page aria-label="Compartilhar página">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>
+        </button>
+      </div>
 
-      <nav aria-label="Links">
-        <a class="button" href="https://shopee.com.br/sevenbizhardware#product_list" target="_blank" rel="noopener">Loja Shopee</a>
-        <a class="button" href="https://www.meuplanejamentofacial.com" target="_blank" rel="noopener">Meu Planejamento Facial</a>
-      </nav>
-    </main>
+      <main>
+        <img class="avatar" src="images/avatar-seven.png" alt="Logo Seven Biz Solutions" width="96" height="96">
+        <h1>Seven Biz Solutions</h1>
+
+        <nav aria-label="Links">
+          <div class="link">
+            <a class="button" href="https://shopee.com.br/sevenbizhardware#product_list" target="_blank" rel="noopener">Loja Shopee</a>
+            <button class="more" type="button" aria-label="Compartilhar Loja Shopee">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+            </button>
+          </div>
+          <div class="link">
+            <a class="button" href="https://www.meuplanejamentofacial.com" target="_blank" rel="noopener">Meu Planejamento Facial</a>
+            <button class="more" type="button" aria-label="Compartilhar Meu Planejamento Facial">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+            </button>
+          </div>
+        </nav>
+      </main>
+    </div>
+
+    <footer>
+      © <span id="year">2026</span> Seven Biz Solutions<br>
+      Todos os direitos reservados
+    </footer>
+
+    <div class="backdrop" id="share" aria-hidden="true">
+      <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="share-title">
+        <div class="sheet-head">
+          <h2 id="share-title">Compartilhar</h2>
+          <button class="close" type="button" aria-label="Fechar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+          </button>
+        </div>
+
+        <div class="preview">
+          <strong id="share-name"></strong>
+          <span id="share-url"></span>
+        </div>
+
+        <div class="options">
+          <button class="option" type="button" id="opt-copy">
+            <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg></span>
+            <span id="copy-label">Copiar link</span>
+          </button>
+          <a class="option" id="opt-whatsapp" target="_blank" rel="noopener">
+            <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21l1.7-5A8.5 8.5 0 1 1 8 19.3z"/></svg></span>
+            WhatsApp
+          </a>
+          <a class="option" id="opt-facebook" target="_blank" rel="noopener">
+            <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h-2a4 4 0 0 0-4 4v3H7v4h2v7h4v-7h3l1-4h-4V7a1 1 0 0 1 1-1h2z"/></svg></span>
+            Facebook
+          </a>
+          <a class="option" id="opt-x" target="_blank" rel="noopener">
+            <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 4l16 16M20 4L4 20"/></svg></span>
+            X
+          </a>
+          <a class="option" id="opt-email">
+            <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span>
+            E-mail
+          </a>
+          <button class="option" type="button" id="opt-native" hidden>
+            <span class="ico"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></span>
+            Mais opções
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        var backdrop = document.getElementById('share');
+        var nameEl = document.getElementById('share-name');
+        var urlEl = document.getElementById('share-url');
+        var copyLabel = document.getElementById('copy-label');
+        var native = document.getElementById('opt-native');
+        var current = { title: '', url: '' };
+        var lastFocus = null;
+
+        document.getElementById('year').textContent = new Date().getFullYear();
+        if (navigator.share) native.hidden = false;
+
+        function open(title, url) {
+          current = { title: title, url: url };
+          var text = encodeURIComponent(title + ' ' + url);
+          nameEl.textContent = title;
+          urlEl.textContent = url.replace(/^https?:\/\//, '');
+          copyLabel.textContent = 'Copiar link';
+          document.getElementById('opt-whatsapp').href = 'https://wa.me/?text=' + text;
+          document.getElementById('opt-facebook').href = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
+          document.getElementById('opt-x').href = 'https://x.com/intent/post?text=' + text;
+          document.getElementById('opt-email').href = 'mailto:?subject=' + encodeURIComponent(title) + '&body=' + encodeURIComponent(url);
+          lastFocus = document.activeElement;
+          backdrop.classList.add('open');
+          backdrop.setAttribute('aria-hidden', 'false');
+          backdrop.querySelector('.close').focus();
+        }
+
+        function close() {
+          backdrop.classList.remove('open');
+          backdrop.setAttribute('aria-hidden', 'true');
+          if (lastFocus) lastFocus.focus();
+        }
+
+        document.querySelectorAll('[data-share-page]').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            open('Seven Biz Solutions', location.href.split('#')[0]);
+          });
+        });
+
+        document.querySelectorAll('.more').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var a = btn.parentElement.querySelector('a');
+            open(a.textContent.trim(), a.href);
+          });
+        });
+
+        backdrop.querySelector('.close').addEventListener('click', close);
+        backdrop.addEventListener('click', function (e) { if (e.target === backdrop) close(); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && backdrop.classList.contains('open')) close();
+        });
+
+        document.getElementById('opt-copy').addEventListener('click', function () {
+          var done = function () { copyLabel.textContent = 'Link copiado!'; };
+          if (navigator.clipboard) {
+            navigator.clipboard.writeText(current.url).then(done);
+          } else {
+            var t = document.createElement('textarea');
+            t.value = current.url;
+            document.body.appendChild(t);
+            t.select();
+            document.execCommand('copy');
+            t.remove();
+            done();
+          }
+        });
+
+        native.addEventListener('click', function () {
+          navigator.share({ title: current.title, url: current.url }).catch(function () {});
+        });
+      })();
+    </script>
   </body>
 </html>
